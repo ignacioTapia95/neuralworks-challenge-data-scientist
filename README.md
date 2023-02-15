@@ -168,42 +168,40 @@ La métrica a maximizar y analizar, será el área bajo la curva de la curva ROC
 
 A su vez se testean otros aspectos del sistema:
 
-    1. En este conjunto de iteraciones se seleccionará el mejor conjunto de hiperparámetros para cada algoritmo mediante un Randomized Grid Search Cross Validation. Se utiliza la variante aleatoria de esta metodología por cuestiones de tiempo. **Resultado**:
+1. En este conjunto de iteraciones se seleccionará el mejor conjunto de hiperparámetros para cada algoritmo mediante un Randomized Grid Search Cross Validation. Se utiliza la variante aleatoria de esta metodología por cuestiones de tiempo. **Resultado**:
 
-    ```JSON
-    {
-        'LogisticRegression': {
-            'solver': 'liblinear',
-            'random_state': 20230214,
-            'penalty': 'l1',
-            'fit_intercept': True,
-            'C': 1000.0
-            },
-        'DecisionTreeClassifier': {
-            'max_features': 'sqrt',
-            'max_depth': 10,
-            'criterion': 'entropy'
-            },
-        'RandomForestClassifier': {
-            'random_state': 20230214,
-            'n_estimators': 100,
-            'max_features': 'sqrt',
-            'max_depth': 10,
-            'criterion': 'gini'
-            }
+```JSON
+{
+    'LogisticRegression': {
+        'solver': 'liblinear',
+        'random_state': 20230214,
+        'penalty': 'l1',
+        'fit_intercept': True,
+        'C': 1000.0
+        },
+    'DecisionTreeClassifier': {
+        'max_features': 'sqrt',
+        'max_depth': 10,
+        'criterion': 'entropy'
+        },
+    'RandomForestClassifier': {
+        'random_state': 20230214,
+        'n_estimators': 100,
+        'max_features': 'sqrt',
+        'max_depth': 10,
+        'criterion': 'gini'
         }
+    }
+```
 
+2. Criterio de selección de variables: Se utiliza el test Chi-squared para determinar la pertinencia de las variables categóricas independientes al momento de predecir la variable binaria "atraso_15". De eata sección se despredenden dos metodologías: 1.1 Seleccionar las variables cuyo coeficiente en el test Chi-squared sean más altas, a este metodología la denominamos "kbest" y, 2.2 Seleccionar sólo aquellas variables cuyo p-value asociado a cada coeficiente del test Chi-squared sea significativo a un 5% (p-value<0.05). **Resultado**:
 
-    ```
+|select_features_criterion 	|	Promedio AUC (conjunto de Validación)| std AUC |
+|-|-|
+|kbest 	|0.636525 	|0.030755|
+|pvalue |	0.655858 |	0.032800|
 
-    2. Criterio de selección de variables: Se utiliza el test Chi-squared para determinar la pertinencia de las variables categóricas independientes al momento de predecir la variable binaria "atraso_15". De eata sección se despredenden dos metodologías: 1.1 Seleccionar las variables cuyo coeficiente en el test Chi-squared sean más altas, a este metodología la denominamos "kbest" y, 2.2 Seleccionar sólo aquellas variables cuyo p-value asociado a cada coeficiente del test Chi-squared sea significativo a un 5% (p-value<0.05). **Resultado**:
-
-    |select_features_criterion 	|	Promedio AUC (conjunto de Validación)| std AUC |
-    |-|-|
-    |kbest 	|0.636525 	|0.030755|
-    |pvalue |	0.655858 |	0.032800|
-
-    El criterio de selección por variables significativas (p-value<0.05) obtuvo mejor resultado que el criterio de selcción por variables con mayor coeficiente. Esta diferencia es significativa (t-stat:-5.09, p-value<0.001)
+El criterio de selección por variables significativas (p-value<0.05) obtuvo mejor resultado que el criterio de selcción por variables con mayor coeficiente. Esta diferencia es significativa (t-stat:-5.09, p-value<0.001)
 
 
 Una vez seleccionado el mejor conjunto de hiperparámetros para cada algoritmo, se proceden a compara entre si, pero en el conjunto de Test, proveniente de la primera separación de datos que se hizo (X_test, y_test).
