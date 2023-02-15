@@ -1,6 +1,6 @@
 # Challenge Data Scientist NeuralWorks
 
-Postulante: Ignacio Tapia
+Postulante: Ignacio Tapia  
 Febrero 2023
 
 ### Problema
@@ -44,7 +44,7 @@ Más adelante veremos que existen algunas fechas que se consideran "temporada al
 
 ##### Distribución de Vuelos por Día de la Semana
 
-![labelname :: Figura 4](https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/notebooks/results/img/02_DELAY_ANALYSIS_DIA-SEMANA.png)
+![labelname :: Figura 4](https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/notebooks/results/img/01_DATA_DISTR_VUELOS_DIA-SEMANA.png)
 
 La gráfica anterior nos muestra una visible diferencia en la cantidad de vuelos promedio existentes en días hábiles (luneas a viernes) y los realizados durante los fines de semana.
 
@@ -62,3 +62,4 @@ Hasta el momento hemos analizados solamente la distribución de las variables in
 |periodo_dia | mañana (entre 5:00 y 11:59), tarde (entre 12:00 y 18:59) y noche (entre 19:00 y 4:59), en base a Fecha-I .|
 
 https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/data/output/synthetic_features.csv
+
