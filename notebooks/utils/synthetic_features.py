@@ -1,4 +1,4 @@
-def temporada_alta(fecha_i, return_values:list=[1,0]):
+def temporada_alta(fecha_i, enriched=False):
     
     '''
     Determina si la fecha programada del vuelo pertenece a temporada alta.
@@ -12,35 +12,61 @@ def temporada_alta(fecha_i, return_values:list=[1,0]):
     ----------
     fecha_i : date, datetime, timestamp
         Fecha y hora programada del vuelo 
-    return_values : list, default:[1,0]
-        Lista con la definición de valor verdadero o falso. Si la fecha se encuentra en la definición de
-        temporada alta, retorna list[0] de lo contrario list[1]. Por defecto [1,0].
+    enriched : bool, default:False
+        Boolean que determina el valor a retornar. Si enriched=True, entonces
+        la función retorna:
+            1: Entre 15-DIC y 03-MAR
+            2: Entre 15-JUL y 31-JUL
+            3: Entre 11-SEP y 30-SEP
+            0: Para todo lo demás.
+        
+        Si enriched=False, entonces la función retorna 1 si la fecha de vuelo
+        se encuentra en temporada alta, independiente de cuál sea esta y 0
+        para todo lo demás.
 
     Returns
     -------
     return_values:
-        return_values[0] si la fecha está en temporada alta
-        return_values[1] si la fecha no está en temporada alta
+        1 si la fecha está en temporada alta
+        0 si la fecha no está en temporada alta
     '''
     
     month = fecha_i.month
     day = fecha_i.day
     
-    # Temporada Alta 1
-    if (month==12 and day>=15) or (month<3) or (month==3 and day<=3):
-        return return_values[0]
+    if enriched:
+        # Temporada Alta 1
+        if (month==12 and day>=15) or (month<3) or (month==3 and day<=3):
+            return 1
+
+        # Temporada Alta 2
+        elif month==7 and (15<=day<=31):
+            return 2
+
+        # Temporada Alta 3
+        elif month==9 and (11<=day<=30):
+            return 3
+
+        else:
+            return 0
     
-    # Temporada Alta 2
-    elif month==7 and (15<=day<=31):
-        return return_values[0]
-    
-    # Temporada Alta 3
-    elif month==9 and (11<=day<=30):
-        return return_values[0]
-    
-    else:
-        return return_values[1]
-    
+    elif not enriched:
+        
+        # Temporada Alta 1
+        if (month==12 and day>=15) or (month<3) or (month==3 and day<=3):
+            return 1
+
+        # Temporada Alta 2
+        elif month==7 and (15<=day<=31):
+            return 1
+
+        # Temporada Alta 3
+        elif month==9 and (11<=day<=30):
+            return 1
+
+        else:
+            return 0
+
     
 def periodo_dia(fecha_i):
     
