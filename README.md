@@ -128,12 +128,12 @@ Vemos ahora que la tasa de atraso aumenta considerablemente enm la temporada alt
 
 A continuación se compara mediante un t-test las medias de delay para cada temporada:
 
-Temporada 1 - Temporada 0 -> (stat: 0.872003, pvalue: 0.383210)
-Temporada 1 - Temporada 2 -> (stat: -15.479630, pvalue: 0.000000)
-Temporada 1 - Temporada 3 -> (stat: 2.675921, pvalue: 0.007459)
-Temporada 0 - Temporada 2 -> (stat: -17.325967, pvalue: 0.000000)
-Temporada 0 - Temporada 3 -> (stat: 2.389320, pvalue: 0.016883)
-Temporada 2 - Temporada 3 -> (stat: 13.887240, pvalue: 0.000000)
+Temporada 1 - Temporada 0 -> (stat: 0.872003, pvalue: 0.383210)  
+Temporada 1 - Temporada 2 -> (stat: -15.479630, pvalue: 0.000000)  
+Temporada 1 - Temporada 3 -> (stat: 2.675921, pvalue: 0.007459)  
+Temporada 0 - Temporada 2 -> (stat: -17.325967, pvalue: 0.000000)  
+Temporada 0 - Temporada 3 -> (stat: 2.389320, pvalue: 0.016883)  
+Temporada 2 - Temporada 3 -> (stat: 13.887240, pvalue: 0.000000)  
 
 Se aprecia el delay de la Temporada 2 es siempre significativamente distintos al resto de las temporadas (p-value<0.001).
 
