@@ -8,7 +8,7 @@ El problema consiste en predecir la probabilidad de atraso de los vuelos que ate
 
 ### Desafío
 
-1. ¿Cómo se distribuyen los datos? ¿Qué te llama la atención o cuál es tu conclusión sobre esto?  
+**1. ¿Cómo se distribuyen los datos? ¿Qué te llama la atención o cuál es tu conclusión sobre esto?**
 
 Para entender la distribución de los registros en el dataset, se propine una análisis univariado de las variables Vuelos por Ciudad de Origen (SIGLAORI), Vuelos por Ciudad de Destino (SIGLADES), Evolución de la proporción de vuelos (Nacionales e Internacionales) a lo largo del tiempo, Vuelos por Operados, Cantidad de Vuelos por día, día de la semana y mes.
 
@@ -50,3 +50,15 @@ La gráfica anterior nos muestra una visible diferencia en la cantidad de vuelos
 
 Hasta el momento hemos analizados solamente la distribución de las variables independientes, las cuales nos ayudará a modela el delay de despegue. Ahora pasaremos a un análisis bivariado, en donde podamos comparar aquellos grupos que identificamos en estas variables, con respecto a la variable de delay.
 
+
+
+**Genera las columnas adicionales y luego expórtelas en un archivo synthetic_features.csv**
+
+|Nueva Variable|Descripción|
+|-|-|
+|Temporada_alta | 1 si Fecha-I está entre 15-Dic y 3-Mar, o 15-Jul y 31-Jul, o 11-Sep y 30-Sep, 0 si no.|
+|dif_min | diferencia en minutos entre Fecha-O y Fecha-I |
+|atraso_15 | 1 si dif_min > 15, 0 si no.|
+|periodo_dia | mañana (entre 5:00 y 11:59), tarde (entre 12:00 y 18:59) y noche (entre 19:00 y 4:59), en base a Fecha-I .|
+
+https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/data/output/synthetic_features.csv
