@@ -73,14 +73,14 @@ Es importante tener en consideración que 2 cada 10 vuelos que despegan en Santi
 ¡Es sorprendente apreciar que las 3 ciudades al tope del gráfico tienen un 100% de vuelos con delay! Pero no nos olvidemos que la frecuencia de vuelos hacia ciertos destinos es muy baja, por lo que debemos revisar estos casos. 
 
 |SIGLADES|CANTIDAD_VUELOS|TASA_ATRASO|DESV_EST| 			
-|-|-|-|-|
-|Quito |	2 |	1.000000 |	0.000000|
-|Puerto Stanley 	|1 |	1.000000 |	NaN|
-Cochabamba |	1 |	1.000000 |	NaN|
-|Ushuia 	6 |	0.666667 	|0.516398|
-|Sydney |	194| 	0.582474 |	0.494427|
+|--|--|--|--|
+|Quito          |	2 |	1.000000 |	0.000000|
+|Puerto Stanley |1    |	1.000000 |	NaN|
+Cochabamba      |	1 |	1.000000 |	NaN|
+|Ushuia         |	6 |	0.666667 |0.516398|
+|Sydney         |194  | 0.582474 |	0.494427|
 
-Las primeras 3 ciudades tienen a lo más 3 despegues desde Santiago. Si tomamos este historial e intentamos predecir si es que existirá una atraso en el siguiente vuelo hacia estos destinos, probablemente la predicción sea afirmativa. Sin embargo, esta predicción se basa en una muestre de tamaño 3 (a lo más), por lo que carece de rigurisiad. Tendremos que tener mucho cuidado con la ciudad de origen al momento de predecir.
+Las primeras 3 ciudades tienen a lo más 2 despegues desde Santiago. Si tomamos este historial e intentamos predecir si es que existirá una atraso en el siguiente vuelo hacia estos destinos, probablemente la predicción sea afirmativa. Sin embargo, esta predicción se basa en una muestre de tamaño 2 (a lo más), por lo que carece de rigurisiad. Tendremos que tener mucho cuidado con la ciudad de origen al momento de predecir.
 
 ##### Tasa de Atraso 15 minutos por Operador
 
