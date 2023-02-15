@@ -44,15 +44,12 @@ Más adelante veremos que existen algunas fechas que se consideran "temporada al
 
 ##### Distribución de Vuelos por Día de la Semana
 
-![labelname :: Figura 4](https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/notebooks/results/img/01_DATA_DISTR_VUELOS_DIA-SEMANA.png)
+![labelname :: Figura 5](https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/notebooks/results/img/01_DATA_DISTR_VUELOS_DIA-SEMANA.png)
 
 La gráfica anterior nos muestra una visible diferencia en la cantidad de vuelos promedio existentes en días hábiles (luneas a viernes) y los realizados durante los fines de semana.
 
-Hasta el momento hemos analizados solamente la distribución de las variables independientes, las cuales nos ayudará a modela el delay de despegue. Ahora pasaremos a un análisis bivariado, en donde podamos comparar aquellos grupos que identificamos en estas variables, con respecto a la variable de delay.
 
-
-
-**Genera las columnas adicionales y luego expórtelas en un archivo synthetic_features.csv**
+**2. Genera las columnas adicionales y luego expórtelas en un archivo synthetic_features.csv**
 
 |Nueva Variable|Descripción|
 |-|-|
@@ -63,3 +60,37 @@ Hasta el momento hemos analizados solamente la distribución de las variables in
 
 https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/data/output/synthetic_features.csv
 
+
+**3. ¿Cómo se compone la tasa de atraso por destino, aerolínea, mes del año, día de la semana, temporada, tipo de vuelo? ¿Qué variables esperarías que más influyeran en predecir atrasos?**
+
+Hasta el momento hemos analizados solamente la distribución de las variables independientes, las cuales nos ayudará a modela el delay de despegue. Ahora pasaremos a un análisis bivariado, en donde podamos comparar aquellos grupos que identificamos en estas variables, con respecto a la variable de delay.
+
+Es importante tener en consideración que 2 cada 10 vuelos que despegan en Santiago de Chile lo hacen con delay mayor a 15 minutos. Teniendo esto en cuenta, veámos cómo se comporta este indice dependiente de la ciudad de destinto.
+
+##### Tasa de Atraso 15 minutos por Ciudad de Destino
+![labelname :: Figura 6](https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/notebooks/results/img/02_DELAY_ANALYSIS_CIUDAD-DESTINO.png)
+
+¡Es sorprendente apreciar que las 3 ciudades al tope del gráfico tienen un 100% de vuelos con delay! Pero no nos olvidemos que la frecuencia de vuelos hacia ciertos destinos es muy baja, por lo que debemos revisar estos casos. 
+
+|SIGLADES|CANTIDAD_VUELOS|TASA_ATRASO|DESV_EST| 			
+|-|-|-|-|
+|Quito |	2 |	1.000000 |	0.000000|
+|Puerto Stanley 	|1 |	1.000000 |	NaN|
+Cochabamba |	1 |	1.000000 |	NaN|
+|Ushuia 	6 |	0.666667 	|0.516398|
+|Sydney |	194| 	0.582474 |	0.494427|
+
+Las primeras 3 ciudades tienen a lo más 3 despegues desde Santiago. Si tomamos este historial e intentamos predecir si es que existirá una atraso en el siguiente vuelo hacia estos destinos, probablemente la predicción sea afirmativa. Sin embargo, esta predicción se basa en una muestre de tamaño 3 (a lo más), por lo que carece de rigurisiad. Tendremos que tener mucho cuidado con la ciudad de origen al momento de predecir.
+
+##### Tasa de Atraso 15 minutos por Operador
+
+![labelname :: Figura 7](https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/notebooks/results/img/02_DELAY_ANALYSIS_OPERADOR.png)
+
+Pareciera ser que, para las aerolineas, ahora si tenemos un comportamiento más esperable en el nivel de delay, es decir, no tenemos ni tasas 0% ni tasas 100% de delay, es más la tasa de delay más pequeña corresponda a la aerolinea Aeromexico con una tasa del 0.28% (n=351 vuelos) (3 de cada 1000 vuelos tienen delay), mientras que la aerolinea con mayor delay es PLus Ultra Lineas Aereas con una tasa del 61% (n=49 vuelos).
+
+
+##### Tasa de Atraso 15 minutos por Mes
+
+![labelname :: Figura 8](https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/notebooks/results/img/02_DELAY_ANALYSIS_MES.png)
+
+Los meses de alta demanda (mes 7 y 12) tienen a su vez una mayor tasa de delay de despegue. 
