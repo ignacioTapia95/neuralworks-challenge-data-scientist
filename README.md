@@ -197,7 +197,7 @@ A su vez se testean otros aspectos del sistema:
 2. Criterio de selección de variables: Se utiliza el test Chi-squared para determinar la pertinencia de las variables categóricas independientes al momento de predecir la variable binaria "atraso_15". De eata sección se despredenden dos metodologías: 1.1 Seleccionar las variables cuyo coeficiente en el test Chi-squared sean más altas, a este metodología la denominamos "kbest" y, 2.2 Seleccionar sólo aquellas variables cuyo p-value asociado a cada coeficiente del test Chi-squared sea significativo a un 5% (p-value<0.05). **Resultado**:
 
 |select_features_criterion 	|	Promedio AUC (conjunto de Validación)| std AUC |
-|-|-|
+|-|-|-|
 |kbest 	|0.636525 	|0.030755|
 |pvalue |	0.655858 |	0.032800|
 
