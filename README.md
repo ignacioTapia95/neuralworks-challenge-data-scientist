@@ -94,3 +94,125 @@ Pareciera ser que, para las aerolineas, ahora si tenemos un comportamiento más 
 ![labelname :: Figura 8](https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/notebooks/results/img/02_DELAY_ANALYSIS_MES.png)
 
 Los meses de alta demanda (mes 7 y 12) tienen a su vez una mayor tasa de delay de despegue. 
+
+##### Tasa de Atraso 15 minutos por día de la semana
+
+![labelname :: Figura 9](https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/notebooks/results/img/02_DELAY_ANALYSIS_DIA-SEMANA.png)
+
+Consistente con los visto en la tasa de atraso por Mes, pareciera ser, que la tasa de atraso aumenta a medida que la cantidad de vuelos aumenta. A nivel de día de la semana, los días lunes, jueves y viernes son en promedio mayores que el resto de los días.
+
+##### Tasa de Atraso 15 minutos por temporada
+
+![labelname :: Figura 10](https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/notebooks/results/img/02_DELAY_ANALYSIS_TEMPORADA-BINARIA.png)
+
+Es interesante apreciar que la tasa de atraso en temporada alta (19.6%) es apenas mayor que la tasa en temporada baja (17.9%). Esto puede deberse que esta clasificación esta dada por regla de negocio y no por la tendencia natural de los datos. A continuación se propone una corrección a este problema.
+
+#### Tasa de Atraso 15 minutos por tipo de temporada
+
+Dado que la clasificación "Temporada alta" esta dada por regla de nogocio, se proine utilizar dichas fechas de temporada alta, pero con clasificaciones diferentes. En el gráfico del punto anterior se muestra que esta clasificación es de tipo binaria, sin embargo, los intervalos de tiempos clasificados como temporada alta, son más de 2. Por ello se propone transformar la variable "temporada_alta" de binaria a categórica, teniendo ahora 4 categoróas: 
+
+1 si Fecha-I está entre 15-Dic y 3-Mar, o 15-Jul y 31-Jul, o 11-Sep y 30-Sep, 0 si no.
+
+|TIPO_TEMPORADA|DESCRIPCIÓN|
+|-|-|
+|1|Fecha-I está entre 15-Dic y 3-Mar|
+|2|Fecha-I está entre 15-Jul y 31-Jul|
+|3|Fecha-I está entre 11-Sep y 30-Sep|
+|0|Para todas las demás fechas|
+
+![labelname :: Figura 10](https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/notebooks/results/img/02_DELAY_ANALYSIS_TEMPORADA-ENRICHED.png)
+
+Vemos ahora que la tasa de atraso aumenta considerablemente enm la temporada alta número 2, mientras que el resto de las temporadas paracen comportarse similares.
+
+![labelname :: Figura 10](https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/notebooks/results/img/02_DELAY_ANALYSIS_REGISTROS-FECHA.png)
+
+A continuación se compara mediante un t-test las medias de delay para cada temporada:
+
+Temporada 1 - Temporada 0 -> (stat: 0.872003, pvalue: 0.383210)
+Temporada 1 - Temporada 2 -> (stat: -15.479630, pvalue: 0.000000)
+Temporada 1 - Temporada 3 -> (stat: 2.675921, pvalue: 0.007459)
+Temporada 0 - Temporada 2 -> (stat: -17.325967, pvalue: 0.000000)
+Temporada 0 - Temporada 3 -> (stat: 2.389320, pvalue: 0.016883)
+Temporada 2 - Temporada 3 -> (stat: 13.887240, pvalue: 0.000000)
+
+Se aprecia el delay de la Temporada 2 es siempre significativamente distintos al resto de las temporadas (p-value<0.001).
+
+
+##### Tasa de Atraso 15 minutos por tipo de vuelo (Nacional e Internacional)
+
+![labelname :: Figura 10](https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/notebooks/results/img/02_DELAY_ANALYSIS_TIPOVUELO.png)
+
+Y efectivamente, el tipo de viaje es una variable relevante, cuando el viaje es nacional la tasa de delay (15.1%) es menor a la tasa de delay para viajes internacionales (22.6%).
+
+
+
+
+**4. Modelamiento**
+
+#### Metodología
+
+Dado que se tiene un problema de clasificación binaria, se utilizan algoritmos adhoc este tipo de problemas:
+1) LogisticRegression
+2) DecisionTreeClassifier
+3) RandomForestClassifier
+
+En términos metodológicos, se toma la muestra de datos de tamaño n=68206 y se sepada en 2 grupos train (70%) y test (30%) seleccionados aleatoriamente (seed=20230214):
+1) X_train: 47.744 registros.
+2) X_test: 20.462 registros.
+3) y_train: 47.744 registros.
+4) y_test: 20.462 registros.
+
+El grupo de entrenamiento (X_train, y_train), se vuelve a dividir, pero esta vez en 30 grupos (Cross Validatio). 29 de estos grupos se utilizaran para entrenar a los algoritmos y el grupo restante (llamda grupo de validación) para validar los resultados del entrenamiento. Esto se hace de forma iterativa seleccionando cada vez 30 grupos distintos. De esta forma evitamos sesgar los resultados de cada algoritmo a un determinado conjunto de datos (muestra).
+
+La métrica a maximizar y analizar, será el área bajo la curva de la curva ROC.
+
+A su vez se testean otros aspectos del sistema:
+
+    1. En este conjunto de iteraciones se seleccionará el mejor conjunto de hiperparámetros para cada algoritmo mediante un Randomized Grid Search Cross Validation. Se utiliza la variante aleatoria de esta metodología por cuestiones de tiempo. **Resultado**:
+
+    ```JSON
+    {
+        'LogisticRegression': {
+            'solver': 'liblinear',
+            'random_state': 20230214,
+            'penalty': 'l1',
+            'fit_intercept': True,
+            'C': 1000.0
+            },
+        'DecisionTreeClassifier': {
+            'max_features': 'sqrt',
+            'max_depth': 10,
+            'criterion': 'entropy'
+            },
+        'RandomForestClassifier': {
+            'random_state': 20230214,
+            'n_estimators': 100,
+            'max_features': 'sqrt',
+            'max_depth': 10,
+            'criterion': 'gini'
+            }
+        }
+
+
+    ```
+
+    2. Criterio de selección de variables: Se utiliza el test Chi-squared para determinar la pertinencia de las variables categóricas independientes al momento de predecir la variable binaria "atraso_15". De eata sección se despredenden dos metodologías: 1.1 Seleccionar las variables cuyo coeficiente en el test Chi-squared sean más altas, a este metodología la denominamos "kbest" y, 2.2 Seleccionar sólo aquellas variables cuyo p-value asociado a cada coeficiente del test Chi-squared sea significativo a un 5% (p-value<0.05). **Resultado**:
+
+    |select_features_criterion 	|	Promedio AUC (conjunto de Validación)| std AUC |
+    |-|-|
+    |kbest 	|0.636525 	|0.030755|
+    |pvalue |	0.655858 |	0.032800|
+
+    El criterio de selección por variables significativas (p-value<0.05) obtuvo mejor resultado que el criterio de selcción por variables con mayor coeficiente. Esta diferencia es significativa (t-stat:-5.09, p-value<0.001)
+
+
+Una vez seleccionado el mejor conjunto de hiperparámetros para cada algoritmo, se proceden a compara entre si, pero en el conjunto de Test, proveniente de la primera separación de datos que se hizo (X_test, y_test).
+
+![labelname :: Figura 10](https://github.com/ignacioTapia95/neuralworks-challenge-data-scientist/blob/main/notebooks/results/img/05_MODEL_COMPARISON_CURVA_ROC.png)
+
+
+**Conclusión**
+
+se observa que, a nivel de área bajo la curva, el algoritmo RandomForestClassifier es mejor que los otros 2 algoritmos. Esta diferencia es significativa cuando comparamos RandomForestClassifier contra DecisionTreeClassifier (t-stat: -10.695900, pvalue<0.001), sin embargo, al comparar contra la regresión logística, esta diferencia no es significativa (t-stat: -1.222936, pvalue: 0.222563).
+
+Es por ello que la definición, para esta metodología, se diebese tomar considerando aspectos del negocio. Por ejemplo, si lo que se pretende es mejorar en aspecto operacionales, es decir, no sólo se quiere predecir correctamente un delay, sino que además se pretende identificar los factores más relevantes y que la compañía debe gestionar para disminuir la tasa de delay, se proprone utilizar la regresión logística ya que sus parámetros, al igual que una regresión lineal, tienen clara interpretabilidad y se puede estimar el impacto marginal de modificar una variable sobre la tasa de delay.
